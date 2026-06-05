@@ -1,5 +1,8 @@
 let myChart = null;
 
+/**
+ * シミュレーションを実行し、結果をグラフに反映する
+ */
 function runSimulation() {
     const n = parseInt(document.getElementById('trials').value);
     const simCount = parseInt(document.getElementById('simulations').value);
@@ -7,10 +10,10 @@ function runSimulation() {
     const pDen = parseInt(document.getElementById('probDen').value);
     const p = pNum / pDen;
 
-    // 成功回数ごとの頻度を格納する配列
-    const results = new Array(n + 1).fill(0);
+    // 全範囲（0〜n回）の頻度を格納する配列を作成
+    const fullResults = new Array(n + 1).fill(0);
 
-    // シミュレーション実行
+    // シミュレーションの実行
     for (let i = 0; i < simCount; i++) {
         let successes = 0;
         for (let j = 0; j < n; j++) {
@@ -18,16 +21,31 @@ function runSimulation() {
                 successes++;
             }
         }
-        results[successes]++;
+        fullResults[successes]++;
     }
 
-    const labels = Array.from({length: n + 1}, (_, i) => i);
-    renderChart(labels, results);
+    // --- 表示範囲の計算（頻度が1以上の最小値と最大値を探す） ---
+    const minIdx = fullResults.findIndex(count => count > 0);
+    const maxIdx = fullResults.findLastIndex(count => count > 0);
+
+    // 最小から最大までのデータだけを抽出
+    const labels = [];
+    const data = [];
+    for (let i = minIdx; i <= maxIdx; i++) {
+        labels.push(i); // 成功回数
+        data.push(fullResults[i]); // 頻度
+    }
+
+    renderChart(labels, data);
 }
 
+/**
+ * Chart.jsを使用してグラフを描画する
+ */
 function renderChart(labels, data) {
     const ctx = document.getElementById('myChart').getContext('2d');
 
+    // 既存のチャートがあれば破棄
     if (myChart) {
         myChart.destroy();
     }
@@ -50,10 +68,11 @@ function renderChart(labels, data) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
+                // ホバー時のツールチップ設定
                 tooltip: {
                     displayColors: false,
                     callbacks: {
-                        title: () => '', // タイトルを非表示
+                        title: () => '', // タイトル（一番上の行）を消す
                         label: function(context) {
                             return [
                                 `成功回数：${context.label}`,
@@ -79,8 +98,8 @@ function renderChart(labels, data) {
     });
 }
 
-// ボタンイベント登録
+// ボタンへのイベント登録
 document.getElementById('runBtn').addEventListener('click', runSimulation);
 
-// 初期実行
+// ページ読み込み時に初回実行
 window.onload = runSimulation;
