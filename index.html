@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>確率分布シミュレーター</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="controls">
+            <div class="control-group">
+                <label>試行回数 (n)</label>
+                <input type="number" id="trials" value="30">
+            </div>
+            <div class="control-group">
+                <label>シミュレーション回数</label>
+                <input type="number" id="simulations" value="10000">
+            </div>
+            <div class="control-group">
+                <label>確率の分子</label>
+                <input type="number" id="probNum" value="1">
+            </div>
+            <div class="control-group">
+                <label>確率の分母</label>
+                <input type="number" id="probDen" value="6">
+            </div>
+            <button id="runBtn">シミュレーション実行</button>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
