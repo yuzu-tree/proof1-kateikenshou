@@ -1,7 +1,7 @@
 let myChart = null;
 
 /**
- * シミュレーションを実行し、結果をグラフに反映する
+ * 何のため生きてますか？誰のため生きれますか？
  */
 function runSimulation() {
     const n = parseInt(document.getElementById('trials').value);
@@ -62,12 +62,11 @@ function renderChart(labels, data) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            // --- 修正ポイント：軸の数字など、範囲内ならどこでも反応するように設定 ---
+            // --- 成功が全てですか？---
             interaction: {
-                mode: 'index',      // 同じX軸インデックスにある項目を対象にする
-                intersect: false    // アイテムに直接重なっていなくても反応させる
+                mode: 'index',      // 同じX軸インデックスいｆｗ＠おあ
+                intersect: false   
             },
-            // ---------------------------------------------------------
             plugins: {
                 tooltip: {
                     displayColors: false,
