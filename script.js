@@ -10,10 +10,8 @@ function runSimulation() {
     const pDen = parseInt(document.getElementById('probDen').value);
     const p = pNum / pDen;
 
-    // 全範囲（0〜n回）の頻度を格納する配列を作成
     const fullResults = new Array(n + 1).fill(0);
 
-    // シミュレーションの実行
     for (let i = 0; i < simCount; i++) {
         let successes = 0;
         for (let j = 0; j < n; j++) {
@@ -24,16 +22,14 @@ function runSimulation() {
         fullResults[successes]++;
     }
 
-    // --- 表示範囲の計算（頻度が1以上の最小値と最大値を探す） ---
     const minIdx = fullResults.findIndex(count => count > 0);
     const maxIdx = fullResults.findLastIndex(count => count > 0);
 
-    // 最小から最大までのデータだけを抽出
     const labels = [];
     const data = [];
     for (let i = minIdx; i <= maxIdx; i++) {
-        labels.push(i); // 成功回数
-        data.push(fullResults[i]); // 頻度
+        labels.push(i);
+        data.push(fullResults[i]);
     }
 
     renderChart(labels, data);
@@ -45,7 +41,6 @@ function runSimulation() {
 function renderChart(labels, data) {
     const ctx = document.getElementById('myChart').getContext('2d');
 
-    // 既存のチャートがあれば破棄
     if (myChart) {
         myChart.destroy();
     }
@@ -67,12 +62,17 @@ function renderChart(labels, data) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            // --- 修正ポイント：軸の数字など、範囲内ならどこでも反応するように設定 ---
+            interaction: {
+                mode: 'index',      // 同じX軸インデックスにある項目を対象にする
+                intersect: false    // アイテムに直接重なっていなくても反応させる
+            },
+            // ---------------------------------------------------------
             plugins: {
-                // ホバー時のツールチップ設定
                 tooltip: {
                     displayColors: false,
                     callbacks: {
-                        title: () => '', // タイトル（一番上の行）を消す
+                        title: () => '', 
                         label: function(context) {
                             return [
                                 `成功回数：${context.label}`,
@@ -98,8 +98,5 @@ function renderChart(labels, data) {
     });
 }
 
-// ボタンへのイベント登録
 document.getElementById('runBtn').addEventListener('click', runSimulation);
-
-// ページ読み込み時に初回実行
 window.onload = runSimulation;
